@@ -1,12 +1,14 @@
 import * as React from 'react'
 import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 
+import { globalStoreI } from './types'
+
 interface routesListI {
 	[key: string]: {
 		path: string
 		exact: boolean
 		privateRoute: boolean
-		Component: React.LazyExoticComponent<React.FunctionComponent>
+		Component: React.LazyExoticComponent<React.FC<globalStoreI>>
 	}
 }
 
@@ -24,8 +26,10 @@ export const routesList: routesListI = {
 		exact: true,
 	},
 }
-export const Router: React.FC = () => {
 
+interface RouterI extends globalStoreI {}
+
+export const Router: React.FC<RouterI> = (props) => {
 	return (
 		<BrowserRouter>
 			{Object.keys(routesList).map((item: string) => {
@@ -38,12 +42,12 @@ export const Router: React.FC = () => {
 						render={() =>
 							privateRoute ? (
 								localStorage.getItem('accessToken') ? (
-									<Component />
+									<Component {...props} />
 								) : (
 									<Redirect to={routesList.Login.path} />
 								)
 							) : (
-								<Component />
+								<Component {...props} />
 							)
 						}
 					/>
