@@ -61,7 +61,7 @@ export const getAuth = (): IAuth => {
 	return get({ key: lcStateDef.auth })
 }
 
-export const setAuth = ({ value }: { value: IAuth }): IAuth => {
+export const setAuth = ({ value }: { value: IAuth }) => {
 	return set({ key: lcStateDef.auth, value })
 }
 

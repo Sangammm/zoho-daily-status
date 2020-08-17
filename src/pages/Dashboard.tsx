@@ -1,23 +1,30 @@
 import * as React from 'react'
 import { globalStoreI } from '../types'
-import { getAuth } from '../Utils/localStore'
-import { initiateZohoAuth } from '../api/'
+import { setAuth } from '../Utils/localStore'
 
+import { useHistory } from 'react-router-dom'
+import { ProjectSelector } from '../components/ProjectSelector'
 interface DashboardI extends globalStoreI {}
 
-export const Dashboard: React.SFC<globalStoreI> = ({ store, setStore }) => {
-	React.useEffect(() => {
-		setStore(getAuth())
-	}, [setStore])
+export const Dashboard: React.SFC<globalStoreI> = (props) => {
+	const { setStore } = props
+	const history = useHistory()
 
-	const isUserValid = React.useMemo(() => {
-		return store?.accessToken && store.refreshToken && store.expires
-	}, [store])
-
-	return isUserValid ? (
-		<h1>Oh you got token huhh! Cool</h1>
-	) : (
-		<button onClick={initiateZohoAuth}>Zoho Login</button>
+	return (
+		<>
+			<button
+				onClick={() => {
+					setStore({ accessToken: '', refreshToken: '', expires: null })
+					setAuth({
+						value: { accessToken: '', refreshToken: '', expires: null },
+					})
+					history.push('/login')
+				}}
+			>
+				Logout{' '}
+			</button>
+			<ProjectSelector {...props} />
+		</>
 	)
 }
 

@@ -3,7 +3,7 @@ import { globalStoreI } from '../types'
 import { tokenApi } from '../api'
 import { setAuth } from '../Utils/localStore'
 import { useHistory } from 'react-router-dom'
-
+import moment from 'moment'
 interface tokenResponseI {
 	data: {
 		access_token: string
@@ -29,25 +29,28 @@ export const Oauth: React.SFC<globalStoreI> = ({ store, setStore }) => {
 					redirect_uri,
 				})
 				const { access_token, refresh_token, expires_in } = data
+				const expires = moment().add(expires_in, 'seconds')
 				setStore({
 					accessToken: access_token,
 					refreshToken: refresh_token,
-					expires: expires_in,
+					expires,
 				})
 				setAuth({
 					value: {
 						accessToken: access_token,
 						refreshToken: refresh_token,
-						expires: expires_in,
+						expires,
 					},
 				})
-				history.push('/')
+				setTimeout(() => {
+					history.push('/')
+				}, 500)
 			} catch (error) {
 				history.push('/')
 			}
 		}
 		getToken()
-	})
+	}, [])
 
 	return (
 		<div>

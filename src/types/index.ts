@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Moment } from 'moment';
 
 export interface globalStoreI {
 	store: globalStoreValuesI
@@ -8,5 +9,5 @@ export interface globalStoreI {
 export interface globalStoreValuesI {
 	accessToken: string
 	refreshToken: string
-	expires: null | string
+	expires: null | string | Moment
 }
