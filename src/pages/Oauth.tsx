@@ -50,7 +50,7 @@ export const Oauth: React.SFC<globalStoreI> = ({ store, setStore }) => {
 			}
 		}
 		getToken()
-	}, [])
+	}, [history, setStore])
 
 	return (
 		<div>

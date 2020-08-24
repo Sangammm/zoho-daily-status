@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import './StatusComp.scss'
 import { DisplayTodayTasks } from './DisplayTasks'
 export interface StatusCompProps {

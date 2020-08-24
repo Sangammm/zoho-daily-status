@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { getTasks } from '../api/index'
 import { globalStoreI } from '../types'
-import { StatusComp, projectDetail } from './StatusComp'
+import { StatusComp } from './StatusComp'
 export interface ProjectSelectorI extends globalStoreI {}
 export interface portalsI {
 	name: string
