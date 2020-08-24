@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Router } from './Router'
 import { globalStoreValuesI } from './types'
+import './App.scss'
 const App: React.FC = () => {
 	/* This is my global Store  */
 	const [store, setStore] = React.useState<globalStoreValuesI>({

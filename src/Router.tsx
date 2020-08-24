@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 
 import { globalStoreI } from './types'
 import { getAuth } from './Utils/localStore'
-import { useValidUser } from './Hooks/isUserValid'
 
 interface routesListI {
 	[key: string]: {
@@ -33,12 +32,6 @@ export const routesList: routesListI = {
 		privateRoute: false,
 		exact: true,
 	},
-	projects: {
-		path: 'portal/:portal',
-		Component: React.lazy(() => import('./pages/SelectProject')),
-		privateRoute: true,
-		exact: true,
-	},
 }
 
 interface RouterI extends globalStoreI {}
@@ -47,11 +40,13 @@ export const Router: React.FC<RouterI> = (props) => {
 	const { store, setStore } = props
 
 	const isValiduser: boolean = React.useMemo(() => {
-		const store = getAuth()
-		return store.accessToken && store.refreshToken && store.expires
+
+		const auth = getAuth()
+		return (store.accessToken && store.refreshToken && store.expires) ||
+			(auth.accessToken && auth.refreshToken && auth.expires)
 			? true
 			: false
-	}, [])
+	}, [store.accessToken, store.expires, store.refreshToken])
 
 	React.useEffect(() => {
 		setStore(getAuth())

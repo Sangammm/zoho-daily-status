@@ -16,6 +16,8 @@ export const initiateZohoAuth = () => {
 		'ZohoProjects.timesheets.READ',
 		'ZohoProjects.portals.READ',
 		'ZohoProjects.projects.READ',
+		'ZohoProjects.bugs.READ',
+		'ZohoProjects.tasks.READ',
 	]
 	const scope: string = scopeArray.join(',')
 	const access_type: string = 'offline'
@@ -39,4 +41,21 @@ export const getPortals = async ({ store }: { store: globalStoreValuesI }) => {
 	const { portals } = portalsResponse.data
 	console.log('portals: ', portals)
 	return portals
+}
+export const getTasks = async ({
+	store,
+	date,
+	portalId,
+}: {
+	store: globalStoreValuesI
+	date: string
+	portalId?: number
+}) => {
+	const portalsResponse = await tokenApi.get('/users/status', {
+		headers: { Authorization: `Bearer ${store.accessToken}` },
+		params: { portalId, date },
+	})
+	const data = portalsResponse.data
+	console.log('portals: ', data)
+	return data
 }
