@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 
 import { globalStoreI } from './types'
 import { getAuth } from './Utils/localStore'
+import { Header } from './components/Header'
 
 interface routesListI {
 	[key: string]: {
@@ -38,18 +39,18 @@ interface RouterI extends globalStoreI {}
 
 export const Router: React.FC<RouterI> = (props) => {
 	const { store, setStore } = props
+	console.log('store: ', store)
 
 	const isValiduser: boolean = React.useMemo(() => {
-
-		const auth = getAuth()
+		const auth = getAuth() || {}
 		return (store.accessToken && store.refreshToken && store.expires) ||
-			(auth.accessToken && auth.refreshToken && auth.expires)
+			(auth?.accessToken && auth?.refreshToken && auth?.expires)
 			? true
 			: false
 	}, [store.accessToken, store.expires, store.refreshToken])
 
 	React.useEffect(() => {
-		setStore(getAuth())
+		setStore(getAuth() || {})
 	}, [setStore])
 
 	return (
@@ -64,12 +65,18 @@ export const Router: React.FC<RouterI> = (props) => {
 						render={() =>
 							privateRoute ? (
 								isValiduser ? (
-									<Component {...props} />
+									<>
+										<Header {...props} />
+										<Component {...props} />
+									</>
 								) : (
 									<Redirect to={routesList.login.path} />
 								)
 							) : (
-								<Component {...props} />
+								<>
+									<Header {...props} />
+									<Component {...props} />
+								</>
 							)
 						}
 					/>

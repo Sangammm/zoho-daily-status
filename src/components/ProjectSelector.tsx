@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getTasks } from '../api/index'
+import { getStatus } from '../api/index'
 import { globalStoreI } from '../types'
 import { StatusComp } from './StatusComp'
 export interface ProjectSelectorI extends globalStoreI {}
@@ -25,7 +25,7 @@ export const ProjectSelector: React.FC<ProjectSelectorI> = ({ store }) => {
 		const getTaskData = async () => {
 			try {
 				setLoading(true)
-				const taskList = await getTasks({
+				const taskList = await getStatus({
 					store,
 					date,
 					portalId: pid,

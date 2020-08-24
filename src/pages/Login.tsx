@@ -3,7 +3,6 @@ import { globalStoreI } from '../types'
 import { initiateZohoAuth } from '../api'
 import { useHistory } from 'react-router-dom'
 import { routesList } from '../Router'
-import { Header } from '../components/Header'
 import './Login.scss'
 export interface LoginProps {}
 
@@ -17,7 +16,6 @@ const Login: React.SFC<globalStoreI> = (props) => {
 	}, [history, store.accessToken, store.expires])
 	return (
 		<>
-			<Header {...props} />
 			<div className="login">
 				<button onClick={initiateZohoAuth}>Zoho Login</button>
 				<p>

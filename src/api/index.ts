@@ -2,6 +2,7 @@ import Axios, { AxiosInstance } from 'axios'
 
 import { API_URL, CLIENT_ID } from '../Utils/env'
 import { globalStoreValuesI } from '../types'
+import { getAuth, setAuth } from '../Utils/localStore'
 
 export const tokenApi: AxiosInstance = Axios.create({
 	baseURL: API_URL,
@@ -10,6 +11,48 @@ export const tokenApi: AxiosInstance = Axios.create({
 		'Content-Type': 'application/json',
 	},
 })
+
+tokenApi.interceptors.response.use(
+	(res) => {
+		return res
+	},
+	async (error) => {
+		if (
+			error &&
+			error.config &&
+			error.response &&
+			error.response.status === 401
+		) {
+			try {
+				if (getAuth().refreshToken) {
+					const newToken = await regenerate(getAuth().refreshToken)
+					if (newToken?.access_token) {
+						setAuth({
+							value: { ...getAuth(), accessToken: newToken.access_token },
+						})
+					}
+					return tokenApi.request(error.config)
+				}
+			} catch (error) {
+				setAuth({ value: { accessToken: '', refreshToken: '', expires: '' } })
+			}
+		}
+	}
+)
+
+const regenerate = async (refresh_token: string) => {
+	try {
+		const newToken = await tokenApi.post(
+			'/regenerate',
+			{},
+			{ headers: { refresh_token } }
+		)
+		return newToken.data
+	} catch (error) {
+		throw error
+	}
+}
+
 export const initiateZohoAuth = () => {
 	const redirect_uri: string = `${window.location.origin}/oauth`
 	const scopeArray = [
@@ -42,7 +85,7 @@ export const getPortals = async ({ store }: { store: globalStoreValuesI }) => {
 	console.log('portals: ', portals)
 	return portals
 }
-export const getTasks = async ({
+export const getStatus = async ({
 	store,
 	date,
 	portalId,
