@@ -27,7 +27,7 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 	}
 
 	const isInTomorrowTask = (task: task | bug) => {
-		return taskStatusTobeTested.includes(task.status.name)
+		return taskStatusTobeTested.includes(task.status.name.toLowerCase())
 	}
 	return (
 		<>

@@ -31,7 +31,7 @@ export interface projectDetail {
 }
 
 export const StatusComp: React.FC<StatusCompProps> = ({ tasksList }) => {
-	const taskStatusTobeTested: string[] = ['open', 'In progress']
+	const taskStatusTobeTested: string[] = ['open', 'in progress']
 
 	return (
 		<div>
