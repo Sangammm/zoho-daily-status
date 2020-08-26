@@ -1,14 +1,22 @@
 const env = process.env
-const { NODE_ENV, REACT_APP_DEV_URL, REACT_APP_PROD_URL } = env
+const {
+	NODE_ENV,
+	REACT_APP_DEV_URL,
+	REACT_APP_PROD_URL,
+	REACT_APP_CLIENT_ID,
+	REACT_APP_CLIENT_ID_PROD,
+} = env
 
 export const isDevelopment = NODE_ENV === 'development'
 export const API_URL = isDevelopment ? REACT_APP_DEV_URL : REACT_APP_PROD_URL
 
-export const CLIENT_ID = env.REACT_APP_CLIENT_ID
+export const CLIENT_ID = isDevelopment
+	? REACT_APP_CLIENT_ID
+	: REACT_APP_CLIENT_ID_PROD
 
 const env_required: { [key: string]: string | undefined } = {
 	API_URL,
-	CLIENT_ID
+	CLIENT_ID,
 }
 
 const checkEnv = () => {
