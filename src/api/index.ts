@@ -4,6 +4,7 @@ import { API_URL, CLIENT_ID } from '../Utils/env'
 import { globalStoreValuesI } from '../types'
 import { getAuth, setAuth } from '../Utils/localStore'
 
+
 export const tokenApi: AxiosInstance = Axios.create({
 	baseURL: API_URL,
 	headers: {
@@ -18,10 +19,7 @@ tokenApi.interceptors.response.use(
 	},
 	async (error) => {
 		if (
-			error &&
-			error.config &&
-			error.response &&
-			error.response.status === 401
+			error?.response?.status === 401
 		) {
 			try {
 				if (getAuth().refreshToken) {
@@ -31,10 +29,15 @@ tokenApi.interceptors.response.use(
 							value: { ...getAuth(), accessToken: newToken.access_token },
 						})
 					}
-					return tokenApi.request(error.config)
+					console.log(error.config)
+					return tokenApi.request({
+						...error.config,
+						headers: { Authorization: `Bearer ${getAuth().accessToken}` },
+					})
 				}
 			} catch (error) {
 				setAuth({ value: { accessToken: '', refreshToken: '', expires: '' } })
+				window.location.replace('/login')
 			}
 		}
 	}
@@ -47,7 +50,11 @@ const regenerate = async (refresh_token: string) => {
 			{},
 			{ headers: { refresh_token } }
 		)
-		return newToken.data
+		if(newToken?.data?.access_token){
+			return newToken.data
+		} else {
+			throw newToken.data
+		}
 	} catch (error) {
 		throw error
 	}
