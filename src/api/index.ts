@@ -29,7 +29,6 @@ tokenApi.interceptors.response.use(
 							value: { ...getAuth(), accessToken: newToken.access_token },
 						})
 					}
-					console.log(error.config)
 					return tokenApi.request({
 						...error.config,
 						headers: { Authorization: `Bearer ${getAuth().accessToken}` },
@@ -89,7 +88,6 @@ export const getPortals = async ({ store }: { store: globalStoreValuesI }) => {
 		headers: { Authorization: `Bearer ${store.accessToken}` },
 	})
 	const { portals } = portalsResponse.data
-	console.log('portals: ', portals)
 	return portals
 }
 export const getStatus = async ({
@@ -106,6 +104,5 @@ export const getStatus = async ({
 		params: { portalId, date },
 	})
 	const data = portalsResponse.data
-	console.log('portals: ', data)
 	return data
 }
