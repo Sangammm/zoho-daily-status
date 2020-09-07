@@ -21,13 +21,13 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 		return true
 	}
 	const isProjectManagment = (task: task) => {
-		return task.tasklist.name.toLowerCase() === 'project management'
+		return task?.tasklist?.name?.toLowerCase() === 'project management'
 			? true
 			: false
 	}
 
 	const isInTomorrowTask = (task: task | bug) => {
-		return taskStatusTobeTested.includes(task.status.name.toLowerCase())
+		return taskStatusTobeTested.includes(task?.status?.type?.toLowerCase())
 	}
 	return (
 		<>
@@ -45,12 +45,12 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 				{taskList?.map((task) => {
 					return (
 						prjtMngFilter(task) && (
-							<li key={task.id_string}>{`${task?.key} - ${task?.name}`}</li>
+							<li key={task?.id_string}>{`${task?.key} - ${task?.name}`}</li>
 						)
 					)
 				})}
 				{bugList?.map((bug) => (
-					<li key={bug.id_string}>{`${bug?.key} - Bug - ${bug?.title} `}</li>
+					<li key={bug?.id_string}>{`${bug?.key} - Bug - ${bug?.title} `}</li>
 				))}
 			</ul>
 
@@ -59,8 +59,8 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 				{taskList?.map((task) => {
 					return (
 						isInTomorrowTask(task) &&
-						prjtMngFilter(task) && (
-							<li key={task.id_string}>{`${task?.key} - ${task?.name} `}</li>
+						!isProjectManagment(task) && (
+							<li key={task?.id_string}>{`${task?.key} - ${task?.name} `}</li>
 						)
 					)
 				})}
@@ -68,7 +68,7 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 					(bug: bug) =>
 						isInTomorrowTask(bug) && (
 							<li
-								key={bug.id_string}
+								key={bug?.id_string}
 							>{`${bug?.key} - Bug - ${bug?.title} `}</li>
 						)
 				)}

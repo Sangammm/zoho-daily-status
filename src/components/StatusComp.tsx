@@ -21,7 +21,7 @@ export interface tasklist {
 	name: string
 }
 export interface status {
-	name: string
+	type: string
 }
 export interface projectDetail {
 	name: string
