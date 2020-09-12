@@ -31,7 +31,7 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 		return taskStatusTobeTested.includes(task?.status?.name?.toLowerCase())
 	}
 
-	const displayTime = (task: task) => {
+	const displayTime = (task: task | bug) => {
 		const hours = Math.floor(task.total_minutes / 60)
 		const minutes = Math.floor(task.total_minutes % 60)
 		let displayTime = ''
@@ -74,7 +74,7 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 					)
 				})}
 				{bugList?.map((bug) => (
-					<li key={bug?.id_string}>{`${bug?.key} - Bug - ${bug?.title} `}</li>
+					<li key={bug?.id_string}>{`${bug?.key} - Issue - ${bug?.title} - ${displayTime(bug)}`}</li>
 				))}
 			</ul>
 
@@ -93,7 +93,7 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 						isInTomorrowTask(bug) && (
 							<li
 								key={bug?.id_string}
-							>{`${bug?.key} - Bug - ${bug?.title} `}</li>
+							>{`${bug?.key} - Issue - ${bug?.title}`}</li>
 						)
 				)}
 			</ul>
