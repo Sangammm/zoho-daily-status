@@ -4,14 +4,14 @@ import { task, bug } from './StatusComp'
 export interface DisplayTasksProps {
 	taskList: task[]
 	bugList: bug[]
-	taskStatusTobeTested: string[]
 }
-export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
+export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 	taskList,
 	bugList,
-	taskStatusTobeTested,
 }) => {
+	const taskStatusTobeTested: string[] = ['open', 'in progress']
 	const [hideProjectManagment, setHideProjectManagment] = useState(false)
+
 	const prjtMngFilter = (task: task) => {
 		if (hideProjectManagment) {
 			if (isProjectManagment(task)) {
@@ -20,6 +20,7 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 		}
 		return true
 	}
+
 	const isProjectManagment = (task: task) => {
 		return task?.tasklist?.name?.toLowerCase() === 'project management'
 			? true
@@ -29,6 +30,23 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 	const isInTomorrowTask = (task: task | bug) => {
 		return taskStatusTobeTested.includes(task?.status?.name?.toLowerCase())
 	}
+
+	const displayTime = (task: task) => {
+		const hours = Math.floor(task.total_minutes / 60)
+		const minutes = Math.floor(task.total_minutes % 60)
+		let displayTime = ''
+		if (hours !== 0) {
+			displayTime += `${hours}h`
+		}
+		if (minutes !== 0 && hours !== 0) {
+			displayTime += ':'
+		}
+		if(minutes !== 0){
+			displayTime += `${minutes}m`
+		}
+		return displayTime
+	}
+
 	return (
 		<>
 			<div className="absolute right top">
@@ -45,7 +63,13 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 				{taskList?.map((task) => {
 					return (
 						prjtMngFilter(task) && (
-							<li key={task?.id_string}>{`${task?.key} - ${task?.name}`}</li>
+							<li key={task?.id_string}>{`${task?.key} - ${
+								task?.name
+							} - ${displayTime(task)} ${
+								task.percent_complete !== 0
+									? ` - [${task.percent_complete}%]`
+									: ''
+							}`}</li>
 						)
 					)
 				})}
@@ -60,7 +84,7 @@ export const DisplayTodayTasks: React.SFC<DisplayTasksProps> = ({
 					return (
 						isInTomorrowTask(task) &&
 						!isProjectManagment(task) && (
-							<li key={task?.id_string}>{`${task?.key} - ${task?.name} `}</li>
+							<li key={task?.id_string}>{`${task?.key} - ${task?.name}`}</li>
 						)
 					)
 				})}

@@ -10,12 +10,16 @@ export interface task {
 	name: string
 	tasklist: tasklist
 	status: status
+	percent_complete: number
+	total_minutes: number
 }
 export interface bug {
 	id_string: string
 	key: string
 	title: string
 	status: status
+	percent_complete: number
+	total_minutes: number
 }
 export interface tasklist {
 	name: string
@@ -32,19 +36,15 @@ export interface projectDetail {
 }
 
 export const StatusComp: React.FC<StatusCompProps> = ({ tasksList }) => {
-	const taskStatusTobeTested: string[] = ['open', 'in progress']
-
 	return (
 		<div>
 			{tasksList.map((item: projectDetail) => (
 				<div className="card" key={item.id_string}>
 					<h3>{item.name}</h3>
-
 					<div className="tasklist">
 						<DisplayTodayTasks
 							bugList={item.bugList}
 							taskList={item.taskList}
-							taskStatusTobeTested={taskStatusTobeTested}
 						/>
 					</div>
 				</div>

@@ -26,7 +26,6 @@ export const ProjectSelector: React.FC<ProjectSelectorI> = ({ store }) => {
 			try {
 				setLoading(true)
 				const taskList = await getStatus({
-					store,
 					date,
 					portalId: pid,
 				})
