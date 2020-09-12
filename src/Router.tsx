@@ -39,7 +39,6 @@ interface RouterI extends globalStoreI {}
 
 export const Router: React.FC<RouterI> = (props) => {
 	const { store, setStore } = props
-	console.log('store: ', store)
 
 	const isValiduser: boolean = React.useMemo(() => {
 		const auth = getAuth() || {}

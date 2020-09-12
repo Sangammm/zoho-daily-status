@@ -1,7 +1,6 @@
 import Axios, { AxiosInstance } from 'axios'
 
 import { API_URL, CLIENT_ID } from '../Utils/env'
-import { globalStoreValuesI } from '../types'
 import { getAuth, setAuth } from '../Utils/localStore'
 
 export const tokenApi: AxiosInstance = Axios.create({
@@ -17,12 +16,7 @@ tokenApi.interceptors.response.use(
 		return res
 	},
 	async (error) => {
-		if (
-			error &&
-			error.config &&
-			error.response &&
-			error.response.status === 401
-		) {
+		if (error?.response?.status === 401) {
 			try {
 				if (getAuth().refreshToken) {
 					const newToken = await regenerate(getAuth().refreshToken)
@@ -31,10 +25,14 @@ tokenApi.interceptors.response.use(
 							value: { ...getAuth(), accessToken: newToken.access_token },
 						})
 					}
-					return tokenApi.request(error.config)
+					return tokenApi.request({
+						...error.config,
+						headers: { Authorization: `Bearer ${getAuth().accessToken}` },
+					})
 				}
 			} catch (error) {
 				setAuth({ value: { accessToken: '', refreshToken: '', expires: '' } })
+				window.location.replace('/login')
 			}
 		}
 	}
@@ -47,7 +45,11 @@ const regenerate = async (refresh_token: string) => {
 			{},
 			{ headers: { refresh_token } }
 		)
-		return newToken.data
+		if (newToken?.data?.access_token) {
+			return newToken.data
+		} else {
+			throw newToken.data
+		}
 	} catch (error) {
 		throw error
 	}
@@ -61,6 +63,7 @@ export const initiateZohoAuth = () => {
 		'ZohoProjects.projects.READ',
 		'ZohoProjects.bugs.READ',
 		'ZohoProjects.tasks.READ',
+		'ZohoProjects.users.READ',
 	]
 	const scope: string = scopeArray.join(',')
 	const access_type: string = 'offline'
@@ -77,28 +80,41 @@ export const zohoApi: AxiosInstance = Axios.create({
 	},
 })
 
-export const getPortals = async ({ store }: { store: globalStoreValuesI }) => {
+export const getPortals = async () => {
 	const portalsResponse = await tokenApi.get('/users/projects', {
-		headers: { Authorization: `Bearer ${store.accessToken}` },
+		headers: { Authorization: `Bearer ${getAuth().accessToken}` },
 	})
 	const { portals } = portalsResponse.data
-	console.log('portals: ', portals)
 	return portals
 }
 export const getStatus = async ({
-	store,
 	date,
 	portalId,
 }: {
-	store: globalStoreValuesI
 	date: string
 	portalId?: number
 }) => {
 	const portalsResponse = await tokenApi.get('/users/status', {
-		headers: { Authorization: `Bearer ${store.accessToken}` },
+		headers: { Authorization: `Bearer ${getAuth().accessToken}` },
 		params: { portalId, date },
 	})
 	const data = portalsResponse.data
-	console.log('portals: ', data)
 	return data
+}
+export const logout = async () => {
+	try {
+		const logout = await tokenApi.post(
+			'/logout',
+			{
+				refresh_token: getAuth().refreshToken,
+			},
+			{
+				headers: { Authorization: `Bearer ${getAuth().accessToken}` },
+			}
+		)
+		return logout.data
+	} catch (error) {
+		console.error(error);
+		// throw error
+	}
 }

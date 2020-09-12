@@ -12,7 +12,7 @@ const date = new Date()
 
 const todayDate = `${date.getFullYear()}-${(date.getMonth() + 1)
 	.toString()
-	.padStart(2, '0')}-${date.getDate()}`
+	.padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
 
 export const ProjectSelector: React.FC<ProjectSelectorI> = ({ store }) => {
 	const [portals, setPortals] = useState<Array<portalsI>>([])
@@ -26,7 +26,6 @@ export const ProjectSelector: React.FC<ProjectSelectorI> = ({ store }) => {
 			try {
 				setLoading(true)
 				const taskList = await getStatus({
-					store,
 					date,
 					portalId: pid,
 				})
@@ -79,7 +78,7 @@ export const ProjectSelector: React.FC<ProjectSelectorI> = ({ store }) => {
 						) : tasksList.length > 0 ? (
 							<StatusComp tasksList={tasksList} />
 						) : (
-							<h3>Select defferent date. We coudn't find any timelog</h3>
+							<h3>Select different date. We coudn't find any timelog</h3>
 						)}
 					</>
 				)}
