@@ -66,7 +66,7 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 							<li key={task?.id_string}>{`${task?.key} - ${
 								task?.name
 							} - ${displayTime(task)} ${
-								task.percent_complete !== 0
+								task.percent_complete != 0
 									? ` - [${task.percent_complete}%]`
 									: ''
 							}`}</li>
