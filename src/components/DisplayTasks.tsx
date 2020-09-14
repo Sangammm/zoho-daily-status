@@ -58,7 +58,7 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 				<label>Hide Project Managment</label>
 			</div>
 
-			<span>Today's Task</span>
+			<span><b>Today's Task</b></span>
 			<ul>
 				{taskList?.map((task) => {
 					return (
@@ -78,7 +78,7 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 				))}
 			</ul>
 
-			<span>Tomorrow's Task</span>
+			<span><b>Tomorrow's Task</b></span>
 			<ul>
 				{taskList?.map((task) => {
 					return (
@@ -97,7 +97,7 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 						)
 				)}
 			</ul>
-			<span>Blockers</span>
+			<span><b>Blockers</b></span>
 			<ul>
 				<li>None</li>
 			</ul>
