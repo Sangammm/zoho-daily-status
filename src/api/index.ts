@@ -12,10 +12,10 @@ export const tokenApi: AxiosInstance = Axios.create({
 })
 
 tokenApi.interceptors.response.use(
-	(res) => {
+	res => {
 		return res
 	},
-	async (error) => {
+	async error => {
 		if (error?.response?.status === 401) {
 			try {
 				if (getAuth().refreshToken) {
@@ -87,6 +87,7 @@ export const getPortals = async () => {
 	const { portals } = portalsResponse.data
 	return portals
 }
+
 export const getStatus = async ({
 	date,
 	portalId,
@@ -101,6 +102,7 @@ export const getStatus = async ({
 	const data = portalsResponse.data
 	return data
 }
+
 export const logout = async () => {
 	try {
 		const logout = await tokenApi.post(
@@ -114,7 +116,7 @@ export const logout = async () => {
 		)
 		return logout.data
 	} catch (error) {
-		console.error(error);
+		console.error(error)
 		// throw error
 	}
 }
