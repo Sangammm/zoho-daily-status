@@ -75,21 +75,17 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 			<ul>
 				{taskList
 					?.filter(task => prjtMngFilter(task))
-					.map(task => {
-						return (
-							true && (
-								<li key={task?.id_string}>
-									{`${task?.key} - ${task?.name} ${
-										!insights ? '' : `- ${displayTime(task)}`
-									} ${
-										Number(task.percent_complete) !== 0
-											? ` - [${task.percent_complete}%]`
-											: ''
-									}`}
-								</li>
-							)
-						)
-					})}
+					.map(task => (
+						<li key={task?.id_string}>
+							{`${task?.key} - ${task?.name} ${
+								!insights ? '' : `- ${displayTime(task)}`
+							} ${
+								Number(task.percent_complete) !== 0
+									? ` - [${task.percent_complete}%]`
+									: ''
+							}`}
+						</li>
+					))}
 				{bugList?.map(bug => (
 					<li key={bug?.id_string}>{`${bug?.key} - Issue - ${bug?.title} ${
 						!insights ? '' : `- ${displayTime(bug)}`
@@ -103,11 +99,9 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 			<ul>
 				{taskList
 					?.filter(task => isInTomorrowTask(task) && !isProjectManagment(task))
-					.map(task => {
-						return (
-							<li key={task?.id_string}>{`${task?.key} - ${task?.name}`}</li>
-						)
-					})}
+					.map(task => (
+						<li key={task?.id_string}>{`${task?.key} - ${task?.name}`}</li>
+					))}
 				{bugList
 					?.filter(bug => isInTomorrowTask(bug))
 					.map((bug: bug) => (
