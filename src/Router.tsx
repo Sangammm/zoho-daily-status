@@ -37,7 +37,7 @@ export const routesList: routesListI = {
 
 interface RouterI extends globalStoreI {}
 
-export const Router: React.FC<RouterI> = (props) => {
+export const Router: React.FC<RouterI> = props => {
 	const { store, setStore } = props
 
 	const isValiduser: boolean = React.useMemo(() => {
