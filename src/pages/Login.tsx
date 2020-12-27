@@ -6,7 +6,7 @@ import { routesList } from '../Router'
 import './Login.scss'
 export interface LoginProps {}
 
-const Login: React.SFC<globalStoreI> = (props) => {
+const Login: React.FC<globalStoreI> = (props) => {
 	const { store } = props
 	const history = useHistory()
 	React.useEffect(() => {

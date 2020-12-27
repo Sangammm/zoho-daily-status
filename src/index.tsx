@@ -3,12 +3,17 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-
+import { ReactQueryDevtools } from 'react-query/devtools'
+import { QueryClient, QueryClientProvider } from 'react-query'
+const queryClient = new QueryClient()
 ReactDOM.render(
 	<React.StrictMode>
-		<Suspense fallback={'Loading....'}>
-			<App />
-		</Suspense>
+		<QueryClientProvider client={queryClient}>
+			<Suspense fallback={'Loading....'}>
+				<App />
+				<ReactQueryDevtools initialIsOpen={false} />
+			</Suspense>
+		</QueryClientProvider>
 	</React.StrictMode>,
 	document.getElementById('root')
 )
