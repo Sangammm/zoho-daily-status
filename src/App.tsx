@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Router } from './Router'
+import { Router } from './routes'
 import { globalStoreValuesI } from './types'
 import './App.scss'
 const App: React.FC = () => {
