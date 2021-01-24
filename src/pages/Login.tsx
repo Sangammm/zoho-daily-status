@@ -2,7 +2,7 @@ import * as React from 'react'
 import { globalStoreI } from '../types'
 import { initiateZohoAuth } from '../api'
 import { useHistory } from 'react-router-dom'
-import { routesList } from '../Router'
+import { routesList } from '../routes/config'
 import './Login.scss'
 export interface LoginProps {}
 

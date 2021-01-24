@@ -52,6 +52,7 @@ export const Router: React.FC<RouterI> = (props) => {
 					/>
 				)
 			})}
+      <Route path='*' component={()=> <Redirect to={routesList.dashboard.path} />}  />
 		</BrowserRouter>
 	)
 }

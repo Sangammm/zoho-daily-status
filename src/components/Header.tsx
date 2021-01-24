@@ -2,7 +2,7 @@ import * as React from 'react'
 import { globalStoreI } from '../types/index'
 import { useHistory } from 'react-router-dom'
 import { setAuth, getAuth } from '../Utils/localStore'
-import { routesList } from '../Router'
+import { routesList } from '../routes/config'
 import { logout } from '../api'
 
 export interface HeaderProps extends globalStoreI {}
