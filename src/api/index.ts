@@ -29,7 +29,10 @@ tokenApi.interceptors.response.use(
 						...error.config,
 						headers: { Authorization: `Bearer ${getAuth().accessToken}` },
 					})
-				}
+				} else {
+          setAuth({ value: { accessToken: '', refreshToken: '', expires: '' } })
+          window.location.replace('/login')
+        }
 			} catch (error) {
 				setAuth({ value: { accessToken: '', refreshToken: '', expires: '' } })
 				window.location.replace('/login')
@@ -72,14 +75,6 @@ export const initiateZohoAuth = () => {
 	window.location.replace(url)
 }
 
-export const zohoApi: AxiosInstance = Axios.create({
-	baseURL: 'https://projectsapi.zoho.com/restapi/',
-	headers: {
-		Accept: 'application/json',
-		'Content-Type': 'application/json',
-	},
-})
-
 export const getPortals = async () => {
 	const portalsResponse = await tokenApi.get('/users/projects', {
 		headers: { Authorization: `Bearer ${getAuth().accessToken}` },
@@ -117,6 +112,5 @@ export const logout = async () => {
 		return logout.data
 	} catch (error) {
 		console.error(error)
-		// throw error
 	}
 }
