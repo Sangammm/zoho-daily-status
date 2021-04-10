@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import { task, bug } from './StatusComp'
-import {
-	displayTime,
-	isInTomorrowTask,
-	isProjectManagment,
-} from '../Utils/taskFuncs'
+import { isInTomorrowTask, isProjectManagment } from '../Utils/taskFuncs'
+import { Task } from './Task'
 export interface DisplayTasksProps {
 	taskList: task[]
 	bugList: bug[]
@@ -14,15 +11,10 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 	taskList,
 	bugList,
 }) => {
-	const [hideProjectManagment, setHideProjectManagment] = useState(false)
-	const [insights, setInsights] = useState(false)
-	const prjtMngFilter = (task: task) => {
-		if (hideProjectManagment) {
-			return !isProjectManagment(task)
-		} else {
-			return true
-		}
-	}
+	const [isProjectManagmentVisible, setIsProjectManagmentVisible] = useState(
+		true
+	)
+	const [isInsightVisible, setIsInsightVisible] = useState(false)
 
 	return (
 		<>
@@ -30,18 +22,18 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 				<div>
 					<input
 						type="checkbox"
-						checked={hideProjectManagment}
-						onChange={e => setHideProjectManagment(e.target.checked)}
+						checked={isProjectManagmentVisible}
+						onChange={(e) => setIsProjectManagmentVisible(e.target.checked)}
 					/>
-					<label>Hide Project Managment</label>
+					<label>Project Managment</label>
 				</div>
 				<div>
 					<input
 						type="checkbox"
-						checked={insights}
-						onChange={e => setInsights(e.target.checked)}
+						checked={isInsightVisible}
+						onChange={(e) => setIsInsightVisible(e.target.checked)}
 					/>
-					<label>Show Insights</label>
+					<label>Insights</label>
 				</div>
 			</div>
 
@@ -50,22 +42,26 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 			</span>
 			<ul>
 				{taskList
-					?.filter(task => prjtMngFilter(task))
-					.map(task => (
-						<li key={task?.id_string}>
-							{`${task?.key} - ${task?.name} ${
-								!insights ? '' : `- ${displayTime(task)}`
-							} ${
-								Number(task.percent_complete) !== 0
-									? ` - [${task.percent_complete}%]`
-									: ''
-							}`}
-						</li>
+					?.filter((task) => isProjectManagmentVisible || !isProjectManagment(task))
+					.map((task) => (
+						<Task
+							key={task.id_string}
+							code={task.key}
+							name={task.name}
+							total_minutes={task.total_minutes}
+							showInsight={isInsightVisible}
+							percent_complete={task.percent_complete}
+						/>
 					))}
-				{bugList?.map(bug => (
-					<li key={bug?.id_string}>{`${bug?.key} - Issue - ${bug?.title} ${
-						!insights ? '' : `- ${displayTime(bug)}`
-					}`}</li>
+				{bugList?.map((bug) => (
+					<Task
+						isBug={true}
+						code={bug.key}
+						name={bug.title}
+						total_minutes={bug.total_minutes}
+						showInsight={isInsightVisible}
+						key={bug.id_string}
+					/>
 				))}
 			</ul>
 
@@ -74,16 +70,16 @@ export const DisplayTodayTasks: React.FC<DisplayTasksProps> = ({
 			</span>
 			<ul>
 				{taskList
-					?.filter(task => isInTomorrowTask(task) && !isProjectManagment(task))
-					.map(task => (
-						<li key={task?.id_string}>{`${task?.key} - ${task?.name}`}</li>
+					?.filter(
+						(task) => isInTomorrowTask(task) && !isProjectManagment(task)
+					)
+					.map((task) => (
+						<Task code={task.key} name={task.name} />
 					))}
 				{bugList
-					?.filter(bug => isInTomorrowTask(bug))
+					?.filter((bug) => isInTomorrowTask(bug))
 					.map((bug: bug) => (
-						<li
-							key={bug?.id_string}
-						>{`${bug?.key} - Issue - ${bug?.title}`}</li>
+						<Task code={bug.key} name={bug.title} isBug={true} />
 					))}
 			</ul>
 			<span>

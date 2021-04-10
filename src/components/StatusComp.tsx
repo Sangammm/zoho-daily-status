@@ -18,7 +18,6 @@ export interface bug {
 	key: string
 	title: string
 	status: status
-	percent_complete: number
 	total_minutes: number
 }
 export interface tasklist {
