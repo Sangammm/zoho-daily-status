@@ -21,25 +21,22 @@ export const ProjectSelector: React.FC<ProjectSelectorI> = ({ store }) => {
 	const [pid, setPid] = useState<number>()
 	const [loading, setLoading] = useState<boolean>(false)
 
-	React.useEffect(() => {
-		const getTaskData = async () => {
-			try {
-				setLoading(true)
-				const taskList = await getStatus({
-					date,
-					portalId: pid,
-				})
-				setTaskList(taskList.uniqueProjects)
-			} catch (error) {
-				if (error.portals) {
-					setPortals(error.portals)
-				}
-			} finally {
-				setLoading(false)
-			}
-		}
-		getTaskData()
-	}, [date, store, pid])
+  const getTaskData = async () => {
+    try {
+      setLoading(true)
+      const taskList = await getStatus({
+        date,
+        portalId: pid,
+      })
+      setTaskList(taskList.uniqueProjects)
+    } catch (error) {
+      if (error.portals) {
+        setPortals(error.portals)
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
 	return (
 		<>
@@ -47,9 +44,9 @@ export const ProjectSelector: React.FC<ProjectSelectorI> = ({ store }) => {
 				{portals.length > 1 ? (
 					<div>
 						<h4>Select Portal</h4>
-						<select onChange={e => setPid(parseInt(e.target.value))}>
+						<select onChange={(e) => setPid(parseInt(e.target.value))}>
 							{portals &&
-								portals.map(item => (
+								portals.map((item) => (
 									<option key={item.id} value={item.id}>
 										{item.name}
 									</option>
@@ -62,9 +59,15 @@ export const ProjectSelector: React.FC<ProjectSelectorI> = ({ store }) => {
 							<input
 								type="date"
 								value={date}
-								onChange={e => setDate(e.target.value)}
-								disabled={loading}
+								onChange={(e) => setDate(e.target.value)}
 							/>
+							<button
+								className={`${loading ? 'disabled' : ''}`}
+								disabled={loading}
+                onClick={getTaskData}
+							>
+								Go
+							</button>
 						</div>
 						{loading ? (
 							'Loading...'

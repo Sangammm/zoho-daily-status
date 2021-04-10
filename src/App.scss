@@ -40,6 +40,18 @@ button:focus {
 
 .dateselector {
 	margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+	input {
+		padding: 2px;
+		text-align: center;
+	}
+	button {
+		margin-left: 20px;
+		padding: 2px 12px;
+		height: 28px;
+	}
 }
 
 // @keyframes App-logo-spin {
