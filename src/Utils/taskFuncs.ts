@@ -12,9 +12,9 @@ export const isInTomorrowTask = (task: task | bug) => {
 	)
 }
 
-export const displayTime = (task: task | bug) => {
-	const hours = Math.floor(task.total_minutes / 60)
-	const minutes = Math.floor(task.total_minutes % 60)
+export const displayTime = ({ total_minutes }: { total_minutes: number }) => {
+	const hours = Math.floor(total_minutes / 60)
+	const minutes = Math.floor(total_minutes % 60)
 	let displayTime = ''
 	if (hours !== 0) {
 		displayTime += `${hours}h`
